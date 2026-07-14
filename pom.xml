@@ -46,6 +46,11 @@
                     <threshold>Low</threshold>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>12.1.8</version>
+            </plugin>
         </plugins>
     </build>
 </project>
