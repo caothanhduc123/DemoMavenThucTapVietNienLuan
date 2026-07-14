@@ -38,7 +38,7 @@ jobs:
           path: target/*.war
 
       - name: OWASP Dependency Check
-        run: mvn org.owasp:dependency-check-maven:12.1.8:check
+        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
   docker:
     needs: build
