@@ -23,18 +23,20 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: maven
 
       - name: Build project
-        run: ant clean dist
+        run: mvn clean package
 
-      - name: Upload build artifact
+      - name: Run SpotBugs
+        run: mvn spotbugs:spotbugs
+
+      - name: Upload WAR
         uses: actions/upload-artifact@v4
         with:
           name: website
-          path: dist/
-      - name: Run SpotBugs
-        run: |
-          ant spotbugs   
+          path: target/*.war
+
       - name: Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
@@ -74,5 +76,4 @@ jobs:
         uses: azure/setup-kubectl@v4
 
       - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f k8s/
+        run: kubectl apply -f k8s/
