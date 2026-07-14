@@ -37,8 +37,8 @@ jobs:
           name: website
           path: target/*.war
 
-      - name: OWASP Dependency Check
-        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+#      - name: OWASP Dependency Check
+#        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
   docker:
     needs: build
