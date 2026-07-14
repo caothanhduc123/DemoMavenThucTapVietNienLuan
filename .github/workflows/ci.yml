@@ -37,8 +37,8 @@ jobs:
           name: website
           path: target/*.war
 
-#      - name: OWASP Dependency Check
-#        run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+      # - name: OWASP Dependency Check
+      #   run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
 
   docker:
     needs: build
@@ -61,21 +61,21 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/website:latest
 
   deploy:
-  needs: docker
-  runs-on: self-hosted
+    needs: docker
+    runs-on: self-hosted
 
-  steps:
-    - name: Checkout source
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-    - name: Check Runner
-      run: |
-        whoami
-        hostname
-        kubectl get nodes
+      - name: Check Runner
+        run: |
+          whoami
+          hostname
+          kubectl get nodes
 
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f k8s/
-        kubectl rollout restart deployment/website-deployment -n website
-        kubectl rollout status deployment/website-deployment -n website
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/
+          kubectl rollout restart deployment/website-deployment -n website
+          kubectl rollout status deployment/website-deployment -n website
