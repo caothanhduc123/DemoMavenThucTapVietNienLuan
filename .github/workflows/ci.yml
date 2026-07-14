@@ -61,15 +61,21 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/website:latest
 
   deploy:
-    needs: docker
-    runs-on: ubuntu-latest
+  needs: docker
+  runs-on: self-hosted
 
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+  steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
 
-      - name: Configure kubectl
-        uses: azure/setup-kubectl@v4
+    - name: Check Runner
+      run: |
+        whoami
+        hostname
+        kubectl get nodes
 
-      - name: Deploy to Kubernetes
-        run: kubectl apply -f k8s/
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/
+        kubectl rollout restart deployment/website-deployment -n website
+        kubectl rollout status deployment/website-deployment -n website
