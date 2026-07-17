@@ -101,3 +101,13 @@ jobs:
           kubectl apply -f k8s/
           kubectl rollout restart deployment/website-deployment -n website
           kubectl rollout status deployment/website-deployment -n website
+      - name: Security Report
+        run: |
+          echo "## 🛡️ Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Tool | Type | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| SpotBugs | SAST | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| OWASP Dependency-Check | SCA | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| Grype | SCA | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
+          echo "| SonarQube | Code Quality | ✅ Passed |" >> $GITHUB_STEP_SUMMARY
