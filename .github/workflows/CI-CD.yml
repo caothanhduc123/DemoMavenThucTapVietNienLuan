@@ -48,9 +48,13 @@ jobs:
         run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk Test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --file=pom.xml
 
       - name: Monitor Project
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk monitor --file=pom.xml
       - name: Build and analyze with Maven
         env:
