@@ -27,18 +27,39 @@ jobs:
 
       - name: Build project
         run: mvn clean package
-
-      - name: Run SpotBugs
+  # Quét lỗi logic SAST 
+    # sử dụng SportBugs  
+      - name: Run SpotBugs 
         run: mvn spotbugs:spotbugs
-
+    # sử dụng SonarQube
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+  # Quét lỗi các thư viện mã nguồn mở có lổ hổng SCA
+    # sử dụng Snyk
+      #Tạo cache file phân tích để giảm thời gian quét
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+       - name: Build and analyze with Maven
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # Mở comment dòng này NẾU bạn dùng SonarQube tự cài đặt (On-premise)
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          
       - name: Upload WAR
         uses: actions/upload-artifact@v4
         with:
           name: website
           path: target/*.war
 
-      # - name: OWASP Dependency Check
-      #   run: mvn dependency-check:check -DnvdApiKey=${{ secrets.NVD_API_KEY }}
+
 
   docker:
     needs: build
