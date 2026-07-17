@@ -41,12 +41,17 @@ jobs:
   # Quét lỗi các thư viện mã nguồn mở có lổ hổng SCA
     # sử dụng Snyk
       #Tạo cache file phân tích để giảm thời gian quét
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: monitor
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Snyk Test
+        run: snyk test --file=pom.xml
+
+      - name: Monitor Project
+        run: snyk monitor --file=pom.xml
       - name: Build and analyze with Maven
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
