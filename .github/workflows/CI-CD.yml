@@ -47,7 +47,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: monitor
-       - name: Build and analyze with Maven
+      - name: Build and analyze with Maven
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # Mở comment dòng này NẾU bạn dùng SonarQube tự cài đặt (On-premise)
